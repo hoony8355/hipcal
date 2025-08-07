@@ -28,15 +28,28 @@
     </section>
   </main>
 
-  <!-- Album Detail Popup -->
+  <!-- Album Detail & Comments Popup -->
   <div id="popup" class="popup hidden">
     <div class="popup-content">
       <button id="popup-close" class="popup-close">×</button>
       <div id="popup-body"></div>
+      <div id="comments-section">
+        <h4>댓글</h4>
+        <div id="comments-list"></div>
+        <form id="comment-form">
+          <input type="text" id="comment-nick" placeholder="닉네임" required />
+          <textarea id="comment-text" placeholder="댓글을 남겨주세요" required></textarea>
+          <button type="submit" class="btn-report">등록</button>
+        </form>
+      </div>
     </div>
   </div>
 
-  <script src="data/albums.json" type="application/json" id="albums-data"></script>
-  <script src="assets/main.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+
+  <!-- Main Script -->
+  <script type="module" src="assets/main.js"></script>
 </body>
 </html>
