@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 - 앨범 등록</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .admin-section { max-width: 500px; margin: 40px auto; padding: 20px; background: #111; border-radius: 6px; }
+    .admin-section h2 { color: #FFD700; margin-bottom: 16px; }
+    .admin-section input, .admin-section textarea { width: 100%; padding: 8px; margin-bottom: 12px; background: #222; border: 1px solid #333; color: #fff; border-radius: 4px; }
+    .hidden { display: none; }
+    #logout-btn { margin-top: 12px; }
+    #login-error { height: 18px; }
+  </style>
+</head>
+<body>
+  <!-- 로그인 섹션 -->
+  <div id="login-section" class="admin-section">
+    <h2>관리자 로그인</h2>
+    <form id="login-form">
+      <input type="text" id="admin-id" placeholder="ID" required />
+      <input type="password" id="admin-pw" placeholder="Password" required />
+      <button type="submit" class="btn-report">로그인</button>
+    </form>
+    <p id="login-error" style="color: #ff6b6b;"></p>
+  </div>
+
+  <!-- 앨범 등록 섹션 -->
+  <div id="admin-section" class="admin-section hidden">
+    <h2>새 앨범 등록</h2>
+    <form id="album-form">
+      <input type="text" id="artist_name" placeholder="아티스트명" required />
+      <input type="text" id="album_name" placeholder="앨범명" required />
+      <input type="date" id="release_date" required />
+      <input type="url" id="cover_url" placeholder="커버 이미지 URL" required />
+      <input type="url" id="youtube_url" placeholder="YouTube URL (선택)" />
+      <button type="submit" class="btn-report">등록</button>
+    </form>
+    <button id="logout-btn" class="btn-report">로그아웃</button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcVDYroDuZaLkD6huOdNQ-pmOg5XPbOCg",
+      authDomain: "hipcal.firebaseapp.com",
+      databaseURL: "https://hipcal-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "hipcal",
+      storageBucket: "hipcal.appspot.com",
+      messagingSenderId: "952594005777",
+      appId: "1:952594005777:web:ef36d84e367401e4e056b0",
+      measurementId: "G-3MNPCZEPN9"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const LOGIN_ID = 'rnjsgywls';
+    const LOGIN_PW = 'rnjsgywls';
+
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+    const loginSection = document.getElementById('login-section');
+    const adminSection = document.getElementById('admin-section');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // 로그인 처리
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const id = document.getElementById('admin-id').value;
+      const pw = document.getElementById('admin-pw').value;
+      if (id === LOGIN_ID && pw === LOGIN_PW) {
+        loginSection.classList.add('hidden');
+        adminSection.classList.remove('hidden');
+      } else {
+        loginError.textContent = '아이디 또는 비밀번호가 틀렸습니다.';
+      }
+    });
+
+    // 로그아웃 처리
+    logoutBtn.addEventListener('click', () => {
+      adminSection.classList.add('hidden');
+      loginSection.classList.remove('hidden');
+      loginError.textContent = '';
+      loginForm.reset();
+    });
+
+    // 앨범 등록 처리
+    const albumForm = document.getElementById('album-form');
+    albumForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = {
+        artist_name: document.getElementById('artist_name').value.trim(),
+        album_name: document.getElementById('album_name').value.trim(),
+        release_date: document.getElementById('release_date').value,
+        cover_url: document.getElementById('cover_url').value.trim(),
+        youtube_url: document.getElementById('youtube_url').value.trim() || null,
+        created_at: serverTimestamp()
+      };
+      push(ref(db, 'albums'), data)
+        .then(() => alert('앨범이 등록되었습니다.'))
+        .catch(err => alert('등록 오류: ' + err));
+      albumForm.reset();
+    });
+  </script>
+</body>
+</html>
