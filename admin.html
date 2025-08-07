@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>관리자 - 앨범 등록</title>
-  <link rel="stylesheet" href="assets/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 - 앨범 등록 (대용량 업로드)</title>
+  <link rel="stylesheet" href="assets/styles.css" />
   <style>
-    .admin-section { max-width: 500px; margin: 40px auto; padding: 20px; background: #111; border-radius: 6px; }
+    .admin-section { max-width: 600px; margin: 40px auto; padding: 20px; background: #111; border-radius: 6px; }
     .admin-section h2 { color: #FFD700; margin-bottom: 16px; }
-    .admin-section input, .admin-section textarea { width: 100%; padding: 8px; margin-bottom: 12px; background: #222; border: 1px solid #333; color: #fff; border-radius: 4px; }
+    .admin-section input, .admin-section textarea, .admin-section button { width: 100%; padding: 8px; margin-bottom: 12px; background: #222; border: 1px solid #333; color: #fff; border-radius: 4px; }
     .hidden { display: none; }
-    #logout-btn { margin-top: 12px; }
+    #logout-btn { width: auto; margin-top: 12px; }
     #login-error { height: 18px; }
+    #bulk-section { margin-top: 20px; }
+    #progress { font-size: 14px; color: #ccc; }
   </style>
 </head>
 <body>
@@ -37,15 +39,24 @@
       <input type="url" id="youtube_url" placeholder="YouTube URL (선택)" />
       <button type="submit" class="btn-report">등록</button>
     </form>
+
+    <div id="bulk-section">
+      <h2>대용량 CSV 업로드</h2>
+      <input type="file" id="csv-input" accept=".csv" />
+      <button id="bulk-upload-btn" class="btn-report">일괄 업로드</button>
+      <p id="progress"></p>
+    </div>
+
     <button id="logout-btn" class="btn-report">로그아웃</button>
   </div>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase & PapaParse SDKs -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getDatabase, ref, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-    // Firebase configuration
+    // Firebase 구성
     const firebaseConfig = {
       apiKey: "AIzaSyBcVDYroDuZaLkD6huOdNQ-pmOg5XPbOCg",
       authDomain: "hipcal.firebaseapp.com",
@@ -57,18 +68,24 @@
       measurementId: "G-3MNPCZEPN9"
     };
 
-    // Initialize Firebase
+    // Firebase 초기화
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    // 로그인 정보
     const LOGIN_ID = 'rnjsgywls';
     const LOGIN_PW = 'rnjsgywls';
 
+    // DOM 요소
     const loginForm = document.getElementById('login-form');
     const loginError = document.getElementById('login-error');
     const loginSection = document.getElementById('login-section');
     const adminSection = document.getElementById('admin-section');
     const logoutBtn = document.getElementById('logout-btn');
+    const albumForm = document.getElementById('album-form');
+    const csvInput = document.getElementById('csv-input');
+    const bulkBtn = document.getElementById('bulk-upload-btn');
+    const progressTxt = document.getElementById('progress');
 
     // 로그인 처리
     loginForm.addEventListener('submit', e => {
@@ -89,10 +106,10 @@
       loginSection.classList.remove('hidden');
       loginError.textContent = '';
       loginForm.reset();
+      progressTxt.textContent = '';
     });
 
-    // 앨범 등록 처리
-    const albumForm = document.getElementById('album-form');
+    // 단건 등록 처리
     albumForm.addEventListener('submit', e => {
       e.preventDefault();
       const data = {
@@ -107,6 +124,48 @@
         .then(() => alert('앨범이 등록되었습니다.'))
         .catch(err => alert('등록 오류: ' + err));
       albumForm.reset();
+    });
+
+    // 대용량 CSV 업로드 처리
+    bulkBtn.addEventListener('click', () => {
+      const file = csvInput.files[0];
+      if (!file) {
+        alert('CSV 파일을 선택해주세요.');
+        return;
+      }
+      progressTxt.textContent = '업로드 진행 중...';
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: results => {
+          const rows = results.data;
+          let success = 0;
+          let fail = 0;
+          rows.forEach((row, idx) => {
+            const item = {
+              artist_name: row.artist_name || '',
+              album_name: row.album_name || '',
+              release_date: row.release_date || '',
+              cover_url: row.cover_url || '',
+              youtube_url: row.youtube_url || null,
+              created_at: serverTimestamp()
+            };
+            push(ref(db, 'albums'), item)
+              .then(() => {
+                success++;
+                progressTxt.textContent = `성공: ${success}, 실패: ${fail}`;
+              })
+              .catch(() => {
+                fail++;
+                progressTxt.textContent = `성공: ${success}, 실패: ${fail}`;
+              });
+          });
+        },
+        error: err => {
+          alert('CSV 파싱 오류: ' + err.message);
+          progressTxt.textContent = '';
+        }
+      });
     });
   </script>
 </body>
