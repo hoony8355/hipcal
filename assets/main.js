@@ -19,13 +19,16 @@ const db = getDatabase(app);
 
 // Global state
 let albumsData = [];
+// Default to current month
+const now = new Date();
 const filters = {
   startDate: null,
   endDate: null,
   sortKey: 'release_date',
   sortOrder: 'asc',
-  year: null,
-  month: null
+  // Initialize view to current month
+  year: now.getFullYear(),
+  month: now.getMonth()
 };
 
 // UI element references
@@ -43,22 +46,51 @@ const commentText = document.getElementById('comment-text');
 function createControls() {
   const controls = document.getElementById('controls') || document.createElement('div');
   controls.id = 'controls';
+  controls.style.display = 'flex';
+  controls.style.alignItems = 'center';
+  controls.style.justifyContent = 'space-between';
   controls.style.margin = '20px';
   controls.innerHTML = `
-    <label>시작일: <input type="date" id="filter-start"></label>
-    <label>종료일: <input type="date" id="filter-end"></label>
-    <select id="sort-select">
-      <option value="release_date:asc">발매일 ↑</option>
-      <option value="release_date:desc">발매일 ↓</option>
-      <option value="artist_name:asc">아티스트 A→Z</option>
-      <option value="artist_name:desc">아티스트 Z→A</option>
-    </select>
-    <select id="year-select"></select>
-    <select id="month-select"></select>
+    <div>
+      <button id="prev-month">◀</button>
+      <span id="month-label"></span>
+      <button id="next-month">▶</button>
+    </div>
+    <div>
+      <select id="sort-select">
+        <option value="release_date:asc">발매일 ↑</option>
+        <option value="release_date:desc">발매일 ↓</option>
+        <option value="artist_name:asc">아티스트 A→Z</option>
+        <option value="artist_name:desc">아티스트 Z→A</option>
+      </select>
+    </div>
   `;
   if (!document.getElementById('controls')) {
     document.body.prepend(controls);
   }
+
+  document.getElementById('prev-month').addEventListener('click', () => {
+    filters.month -= 1;
+    if (filters.month < 0) { filters.month = 11; filters.year -= 1; }
+    updateMonthLabel();
+    updateView();
+  });
+  document.getElementById('next-month').addEventListener('click', () => {
+    filters.month += 1;
+    if (filters.month > 11) { filters.month = 0; filters.year += 1; }
+    updateMonthLabel();
+    updateView();
+  });
+  document.getElementById('sort-select').addEventListener('change', handleSortChange);
+
+  updateMonthLabel();
+}
+
+/** Update month label in controls */
+function updateMonthLabel() {
+  const lbl = document.getElementById('month-label');
+  lbl.textContent = `${filters.year}년 ${filters.month+1}월`;
+}
   document.getElementById('filter-start').addEventListener('change', handleDateChange);
   document.getElementById('filter-end').addEventListener('change', handleDateChange);
   document.getElementById('sort-select').addEventListener('change', handleSortChange);
