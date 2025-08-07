@@ -150,3 +150,28 @@ body {
 .popup-content a:hover {
   text-decoration: underline;
 }
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.calendar-cell {
+  background: #222;
+  padding: 4px;
+  min-height: 120px;
+  overflow-y: auto;
+  border-radius: 4px;
+}
+.day-header {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.calendar-album img {
+  width: 100%;
+  border-radius: 4px;
+}
+.calendar-album p {
+  font-size: 12px;
+  margin: 2px 0;
+}
+
