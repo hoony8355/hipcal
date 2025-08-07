@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>한국힙합 발매 달력</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1>한국힙합 발매 달력</h1>
+    <a href="report.html" class="btn-report">앨범 제보하기</a>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Calendar View -->
+    <section id="calendar-view">
+      <h2>달력 뷰</h2>
+      <div id="calendar-container" class="calendar-grid"></div>
+    </section>
+
+    <!-- List View -->
+    <section id="list-view">
+      <h2>리스트 뷰</h2>
+      <div id="list-container"></div>
+    </section>
+  </main>
+
+  <!-- Album Detail Popup -->
+  <div id="popup" class="popup hidden">
+    <div class="popup-content">
+      <button id="popup-close" class="popup-close">×</button>
+      <div id="popup-body"></div>
+    </div>
+  </div>
+
+  <script src="data/albums.json" type="application/json" id="albums-data"></script>
+  <script src="assets/main.js"></script>
+</body>
+</html>
