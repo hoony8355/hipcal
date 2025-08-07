@@ -13,6 +13,9 @@
     <a href="report.html" class="btn-report">앨범 제보하기</a>
   </header>
 
+  <!-- Controls (date filter, sort, year/month) -->
+  <div id="controls" class="controls-container"></div>
+
   <!-- Main Content -->
   <main>
     <!-- Calendar View -->
@@ -45,11 +48,7 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
-
-  <!-- Main Script -->
+  <!-- Main Script as ES Module -->
   <script type="module" src="assets/main.js"></script>
 </body>
 </html>
