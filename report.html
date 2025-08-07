@@ -14,42 +14,46 @@
   </header>
 
   <!-- Report Form -->
-  <main style="padding: 20px;">
+  <main style="padding: 20px; max-width: 600px; margin: 0 auto;">
     <h2 style="margin-bottom: 16px;">놓친 앨범 제보하기</h2>
-    <form id="report-form" action="#" method="POST">
-      <div style="margin-bottom:12px;">
-        <label for="artist_name">아티스트명</label><br />
-        <input type="text" id="artist_name" name="artist_name" required style="width:100%; padding:8px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;" />
+    <form id="report-form">
+      <div class="form-group">
+        <label for="artist_name">아티스트명</label>
+        <input type="text" id="artist_name" name="artist_name" required />
       </div>
-      <div style="margin-bottom:12px;">
-        <label for="album_name">앨범명</label><br />
-        <input type="text" id="album_name" name="album_name" required style="width:100%; padding:8px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;" />
+      <div class="form-group">
+        <label for="album_name">앨범명</label>
+        <input type="text" id="album_name" name="album_name" required />
       </div>
-      <div style="margin-bottom:12px;">
-        <label for="release_date">발매일</label><br />
-        <input type="date" id="release_date" name="release_date" required style="width:100%; padding:8px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;" />
+      <div class="form-group">
+        <label for="release_date">발매일</label>
+        <input type="date" id="release_date" name="release_date" required />
       </div>
-      <div style="margin-bottom:12px;">
-        <label for="cover_url">커버 이미지 URL</label><br />
-        <input type="url" id="cover_url" name="cover_url" style="width:100%; padding:8px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;" />
+      <div class="form-group">
+        <label for="cover_url">커버 이미지 URL</label>
+        <input type="url" id="cover_url" name="cover_url" />
       </div>
-      <div style="margin-bottom:12px;">
-        <label for="youtube_url">YouTube URL (선택)</label><br />
-        <input type="url" id="youtube_url" name="youtube_url" style="width:100%; padding:8px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;" />
+      <div class="form-group">
+        <label for="youtube_url">YouTube URL (선택)</label>
+        <input type="url" id="youtube_url" name="youtube_url" />
       </div>
-      <div style="margin-bottom:12px;">
-        <label for="reporter_nick">제보자 닉네임</label><br />
-        <input type="text" id="reporter_nick" name="reporter_nick" required style="width:100%; padding:8px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;" />
+      <div class="form-group">
+        <label for="reporter_nick">제보자 닉네임</label>
+        <input type="text" id="reporter_nick" name="reporter_nick" required />
       </div>
-      <div style="margin-bottom:16px;">
-        <label for="note">추가 코멘트 (선택)</label><br />
-        <textarea id="note" name="note" rows="4" style="width:100%; padding:8px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;"></textarea>
+      <div class="form-group">
+        <label for="note">추가 코멘트 (선택)</label>
+        <textarea id="note" name="note" rows="4"></textarea>
       </div>
-      <button type="submit" style="background-color:#FFD700; color:#000; padding:10px 20px; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">제보 제출</button>
+      <button type="submit" class="btn-report">제보 제출</button>
     </form>
   </main>
 
-  <!-- TODO: form submission 스크립트 추가 (Firebase or serverless) -->
-  <script src="assets/report.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+
+  <!-- Report handling script -->
+  <script type="module" src="assets/report.js"></script>
 </body>
 </html>
