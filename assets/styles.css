@@ -1,0 +1,152 @@
+/* 기본 레이아웃 */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #111;
+  padding: 10px 20px;
+}
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+.btn-report {
+  background-color: #FFD700;
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.btn-report:hover {
+  background-color: #E1B12C;
+}
+
+/* 캘린더 뷰 그리드 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.album-card {
+  background-color: #222;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+.album-card:hover {
+  background-color: #333;
+}
+.album-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.album-card p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 리스트 뷰 */
+#list-container .album-item {
+  display: flex;
+  align-items: center;
+  background-color: #222;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+#list-container .album-item:hover {
+  background-color: #333;
+}
+.album-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 12px;
+}
+.album-item .details p {
+  margin: 2px 0;
+  font-size: 14px;
+}
+.album-item .details p:nth-child(3) {
+  color: #ccc;
+  font-size: 12px;
+}
+
+/* 팝업 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.popup.hidden {
+  display: none;
+}
+.popup-content {
+  background-color: #111;
+  padding: 20px;
+  border-radius: 6px;
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+.popup-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.popup-content h3 {
+  margin: 12px 0 6px;
+  font-size: 18px;
+}
+.popup-content p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #ccc;
+}
+.popup-content a {
+  color: #FFD700;
+  text-decoration: none;
+  font-weight: bold;
+}
+.popup-content a:hover {
+  text-decoration: underline;
+}
